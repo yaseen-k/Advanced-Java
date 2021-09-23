@@ -22,9 +22,10 @@ public class RestController {
 	/** 
 	 * ----------- Retrieve All Employee -----------------
 	 */
-	@RequestMapping(value = "/employees/", method = RequestMethod.GET)
+	@RequestMapping(value = "/employees", method = RequestMethod.GET)
 	public ResponseEntity<List<Employee>> listAllEmployees() {
 		List<Employee> emps = empRepo.getAllEmployees();
+		System.out.println("Featching all Employees..");
 		
 		if(emps.isEmpty()) {
 			return new ResponseEntity<List<Employee>>(HttpStatus.NO_CONTENT);
@@ -54,7 +55,7 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/employee/", method = RequestMethod.POST)
 	public ResponseEntity<Void> createEmployee(@RequestBody Employee emp, UriComponentsBuilder ucBuilder) {
-		System.out.println("Creating Employee " + emp.getName());
+		System.out.println("Adding Employee " + emp.getName());
 		
 		if(empRepo.isEmployeeExist(emp)) {
 			System.out.println("An Employee with name " + emp.getName() + " already exist");

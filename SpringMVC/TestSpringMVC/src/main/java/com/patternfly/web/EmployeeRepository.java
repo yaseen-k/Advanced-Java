@@ -24,14 +24,14 @@ public class EmployeeRepository {
 		e2.setName("Abhinav Singh");
 		e2.setDesignation("Business Analyst");
 		e2.setCompanyName("Ola");
-		e2.setExp(2);
+		e2.setExp(1);
 		
 		Employee e3 = new Employee();
 		e3.setEid(3);
 		e3.setName("Badal Kumar");
 		e3.setDesignation("DevOps Engineer");
 		e3.setCompanyName("Zoom Video Communications, Inc.");
-		e3.setExp(3);
+		e3.setExp(2);
 		
 		allEmployees.add(e1);
 		allEmployees.add(e2);

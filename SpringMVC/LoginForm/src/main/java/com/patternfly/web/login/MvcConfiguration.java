@@ -1,4 +1,4 @@
-package com.patternfly.web;
+package com.patternfly.web.login;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -6,6 +6,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
 @ComponentScan("com.patternfly")
-public class MvcConfig implements WebMvcConfigurer {}
+@EnableWebMvc
+public class MvcConfiguration implements WebMvcConfigurer {}

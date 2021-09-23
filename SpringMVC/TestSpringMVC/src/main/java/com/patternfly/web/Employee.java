@@ -1,8 +1,5 @@
 package com.patternfly.web;
 
-import org.springframework.stereotype.Controller;
-
-@Controller
 public class Employee {
 	private int eid;
 	private String name;

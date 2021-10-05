@@ -11,7 +11,7 @@ import org.hibernate.cfg.Configuration;
 public class App 
 {
 	public static List<Student> getStudents() {
-		List<Student> list = new ArrayList<>();
+		List<Student> list = new ArrayList<Student>();
 		
 		Student s1 = new Student();
 		s1.setName("Talha Yaseen");

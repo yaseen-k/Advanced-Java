@@ -27,6 +27,8 @@ public class Student {
 	@Column(name = "DOB")
 	private String dob;
 
+	private Certificate certificate;
+	
 	public int getId() {
 		return id;
 	}
@@ -65,6 +67,14 @@ public class Student {
 
 	public void setDob(String dob) {
 		this.dob = dob;
+	}
+	
+	public Certificate getCertificate() {
+		return certificate;
+	}
+
+	public void setCertificate(Certificate certificate) {
+		this.certificate = certificate;
 	}
 
 	@Override

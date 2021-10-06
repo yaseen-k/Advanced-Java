@@ -49,6 +49,7 @@ public class MapDemo {
 		System.out.println("Question 1: " + newQ.getQues());
 		System.out.println("Answer: " + newQ.getAnswer().getAnswer());
 		System.out.println();
+		
 		session.close();
 		factory.close();
 	}

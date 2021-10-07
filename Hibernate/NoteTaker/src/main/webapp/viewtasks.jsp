@@ -13,10 +13,10 @@
 <title>View all notes</title>
 </head>
 <body>
-	<div class="container">
+	<div class="container mb-5">
 		<%@include file="navbar.jsp"%>
 		<br>
-		<h4 class="text-uppercase">All Notes:</h4>
+		<h4 class="text-uppercase mb-0 mt-2">All Notes:</h4>
 
 		<div class="row">
 			<div class="col-12">

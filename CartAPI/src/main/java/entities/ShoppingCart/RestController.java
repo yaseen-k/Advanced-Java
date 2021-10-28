@@ -30,16 +30,9 @@ public class RestController {
 		String email = test.getEmail();
 		String password = test.getPassword();
 
-		if (!email.isEmpty()
-				&& !password.isEmpty()) {
-			if (email.length() > 11 && email.substring(email.length() - 11).equals("@beehyv.com")) {
-				System.out.println("{“result”:”Success”}  200 Ok");
-				return new ResponseEntity<String>("{'result':'Success'}  200 Ok",HttpStatus.OK);
-			}
-
-			System.out.println("{“result”:”failure”}     401");
-			// System.out.println(HttpStatus.UNAUTHORIZED);
-			return new ResponseEntity<String>("{'result':'failure'}  401", HttpStatus.UNAUTHORIZED);
+		if (userRepo.isValidLogin(email, password)) {
+			System.out.println("{“result”:”Success”}  200 Ok");
+			return new ResponseEntity<String>("{'result':'Success'}  200 Ok",HttpStatus.OK);
 		}
 
 		System.out.println("{“result”:”failure”}     401");
@@ -50,27 +43,22 @@ public class RestController {
 	 * 2.-------------------- SignUp ---------------------
 	 */
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public ResponseEntity<Void> validateSignup(@RequestBody SignUpCredentials test) {
+	public ResponseEntity<String> validateSignup(@RequestBody SignUpCredentials test) {
 		System.out.println("SignUp details checking...");
 
 		String name = test.getName();
 		String email = test.getEmail();
 		String password = test.getPassword();
 
-		if (!name.isEmpty()
-				&& !email.isEmpty()
-				&& !password.isEmpty()) {
-			if (email.length() > 11 && email.substring(email.length() - 11).equals("@beehyv.com")) {
-				System.out.println("{“result”:”Success”}  200 Ok");
-				return new ResponseEntity<Void>(HttpStatus.OK);
-			}
-
-			System.out.println("{“result”:”failure”}     401");
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		int signupVal = userRepo.isValidSignup(name, email, password);
+		if (signupVal != 0) {
+			String result = String.format("{'userId':%d}  200 Ok", signupVal);
+			System.out.println(result);
+			return new ResponseEntity<String>(result, HttpStatus.OK);
 		}
 
 		System.out.println("{“result”:”failure”}     401");
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<String>("{'result':'failure'}  401", HttpStatus.UNAUTHORIZED);
 	}
 	
 	
@@ -249,5 +237,15 @@ public class RestController {
 		System.out.println("Fetching order history of user, userID = " + uid);
 		List<Order> orders = userRepo.getOrderHistory(uid);
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+	}
+	
+	/**
+	 * 17.-------------------- Create Order ---------------------
+	 */
+	@RequestMapping(value = "/order/{userId}/createOrder", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Order> createOrders(@PathVariable("userId") int uid) {
+		System.out.println("Creating order of user, userID = " + uid);
+		Order order = userRepo.createOrder(uid);
+		return new ResponseEntity<Order>(order, HttpStatus.OK);
 	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Order {
 	private int orderId;
-	private List<OrderItem> products;
+	private List<CartItem> products;
 	private String orderStatus;
 	
 	public int getOrderId() {
@@ -15,11 +15,11 @@ public class Order {
 		this.orderId = orderId;
 	}
 	
-	public List<OrderItem> getProducts() {
+	public List<CartItem> getProducts() {
 		return products;
 	}
 	
-	public void setProducts(List<OrderItem> products) {
+	public void setProducts(List<CartItem> products) {
 		this.products = products;
 	}
 	

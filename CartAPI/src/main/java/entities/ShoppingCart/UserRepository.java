@@ -9,15 +9,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
+	List<SignUpCredentials> signupUserList;
 	List<User> usersList;
 	List<UserCart> userCartList;
-	Map<Integer, List<OrderItem>> userItemListMap;
 	Map<Integer, List<Order>> userOrderListMap;
 	
 	public UserRepository() {
+		signupUserList = new ArrayList<SignUpCredentials>();
 		usersList = new ArrayList<User>();
 		userCartList = new ArrayList<UserCart>();
-		userItemListMap = new HashMap<Integer, List<OrderItem>>();
 		userOrderListMap = new HashMap<Integer, List<Order>>();
 		
 		// User 1
@@ -43,7 +43,6 @@ public class UserRepository {
 		userCart1.setUserId(10);
 		userCart1.setCart(cart1);
 		
-		userItemListMap.put(10, new ArrayList<OrderItem>());
 		userOrderListMap.put(10, new ArrayList<Order>());
 		
 		//User 2
@@ -69,13 +68,82 @@ public class UserRepository {
 		userCart2.setUserId(388);
 		userCart2.setCart(cart2);
 		
-		userItemListMap.put(388, new ArrayList<OrderItem>());
 		userOrderListMap.put(388, new ArrayList<Order>());
 		
 		userCartList.add(userCart1);
 		userCartList.add(userCart2);
 	}
 
+	public static boolean isValidBase64String(String str) {
+		int len = str.length();
+		
+		if(len % 4 != 0) {
+			return false;
+		}
+		
+		int cnt = 0, i = 0;
+		for(i = len-1; i >= 0; i--) {
+			char charA = str.charAt(i);
+			if(charA == '=') {
+				cnt++;
+				if(i <= len - 4 || i+cnt != len) {
+					return false;
+				}
+				continue;
+			}
+			else if(!((charA >= 'a' && charA <= 'z') || (charA >= 'A' && charA <= 'Z') || (charA >= '0' && charA <= '9'))){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean isValidLogin(String email, String password) {
+		if (!email.isEmpty()
+				&& !password.isEmpty()) {
+			if ((email.length() > 11 && email.substring(email.length() - 11).equals("@beehyv.com")) && isValidBase64String(password)) {
+				for(SignUpCredentials user : signupUserList) {
+					if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
+						return true;
+					}
+				}
+				
+				return false;
+			}
+			
+			return false;
+		}
+		
+		return false;
+	}
+	
+	public int isValidSignup(String name, String email, String password) {
+		if (!name.isEmpty()
+				&& !email.isEmpty()
+				&& !password.isEmpty()) {
+			if ((email.length() > 11 && email.substring(email.length() - 11).equals("@beehyv.com")) && isValidBase64String(password)) {
+				for(SignUpCredentials user : signupUserList) {
+					if(user.getEmail().equals(email)) {
+						return 0;
+					}
+				}
+				
+				SignUpCredentials user = new SignUpCredentials();
+				user.setName(name);
+				user.setEmail(email);
+				user.setPassword(password);
+				
+				signupUserList.add(user);
+				return signupUserList.size();
+			}
+			
+			return 0;
+		}
+		
+		return 0;
+	}
+	
 	public boolean isUserPresent(int userId) {
 		for (User u : usersList) {
 			if (u.getUserID() == userId) {
@@ -199,5 +267,23 @@ public class UserRepository {
 	
 	public List<Order> getOrderHistory (int userId) {
 		return userOrderListMap.get(userId);
+	}
+	
+	public Order createOrder(int userId) {
+		List<Order> orders = userOrderListMap.get(userId);
+		List<CartItem> cartItems = new ArrayList<CartItem>();
+		for(UserCart userCart : userCartList) {
+			if(userCart.getUserId() == userId) {
+				cartItems = userCart.getCart().getProducts();
+			}
+		}
+		
+		Order order = new Order();
+		order.setOrderId(orders.size()+1);
+		order.setProducts(cartItems);
+		order.setOrderStatus("Awaiting Payment");
+		
+		userOrderListMap.get(userId).add(order);
+		return order;
 	}
 }
